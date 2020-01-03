@@ -34,3 +34,38 @@
         @queue[0]
     end
   end
+
+  class Map
+
+    def initialize
+        @map = []
+    end
+
+    def set(key, value)
+        pair = [key, value]
+        @map.each do |tup|
+            if tup[0] == key
+                tup[1] = value
+                return
+            end
+        end
+        @map << pair
+    end
+
+    def get(key)
+        @map.each do |tup|
+            return tup if tup[0] == key
+        end
+    end
+
+    def delete(key)
+        @map.each_with_index do |tup, i|
+            @map.delete_at(i) if tup[0] == key
+        end
+    end
+
+    def show
+        @map
+    end
+    
+  end
