@@ -46,15 +46,16 @@
         @map.each do |tup|
             if tup[0] == key
                 tup[1] = value
-                return
+                return value
             end
         end
         @map << pair
+        return value
     end
 
     def get(key)
         @map.each do |tup|
-            return tup if tup[0] == key
+            return tup[1] if tup[0] == key
         end
     end
 
