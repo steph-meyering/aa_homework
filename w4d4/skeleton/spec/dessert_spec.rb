@@ -7,36 +7,67 @@ Instructions: implement all of the pending specs (the `it` statements without bl
 
 describe Dessert do
   let(:chef) { double("chef") }
+  subject(:brownie) { Dessert.new("brownie", 10 , chef) }
 
   describe "#initialize" do
-    it "sets a type"
-
-    it "sets a quantity"
-
-    it "starts ingredients as an empty array"
-
-    it "raises an argument error when given a non-integer quantity"
+    it "sets a type" do
+      expect(subject.type).to eq("brownie")
+    end
+    it "sets a quantity" do
+      expect(subject.quantity).to eq(10)
+    end
+    it "starts ingredients as an empty array" do
+      expect(subject.ingredients).to eq([])
+    end
+    it "raises an argument error when given a non-integer quantity" do
+      expect { Dessert.new("bernie", "2020", :chef)}.to raise_error(ArgumentError)
+    end
   end
 
   describe "#add_ingredient" do
-    it "adds an ingredient to the ingredients array"
+    it "adds an ingredient to the ingredients array" do
+      subject.add_ingredient("chocolate")
+      expect(subject.ingredients).to eq(["chocolate"])
+    end
   end
-
+  
   describe "#mix!" do
-    it "shuffles the ingredient array"
+    it "shuffles the ingredient array" do
+      ingredients = ["chocolate", "flour", "egg", "sugar", "butter"]
+      ingredients.each do |ingredient|
+        brownie.add_ingredient(ingredient)
+      end
+      expect(subject.ingredients).to eq(ingredients)
+      brownie.mix!
+      expect(subject.ingredients).to_not eq(ingredients)
+      expect(subject.ingredients.sort).to eq(ingredients.sort)
+    end
   end
 
   describe "#eat" do
-    it "subtracts an amount from the quantity"
+    it "subtracts an amount from the quantity" do
+      expect(subject.quantity).to eq(10)
+      brownie.eat(4)
+      expect(subject.quantity).to eq(6)
+    end
+    
 
-    it "raises an error if the amount is greater than the quantity"
+    it "raises an error if the amount is greater than the quantity" do
+      expect { brownie.eat(11) }.to raise_error("not enough left!")
+    end
   end
 
   describe "#serve" do
-    it "contains the titleized version of the chef's name"
+    it "contains the titleized version of the chef's name" do
+      allow(chef).to receive(:titleize).and_return("Chef Bernie the Great Baker")
+      expect(subject.serve).to eq("Chef Bernie the Great Baker has made 10 brownies!")
+    end
   end
 
   describe "#make_more" do
-    it "calls bake on the dessert's chef with the dessert passed in"
+    it "calls bake on the dessert's chef with the dessert passed in" do
+      allow(chef).to receive(:bake).with(brownie)
+      brownie.make_more
+    end
   end
 end
